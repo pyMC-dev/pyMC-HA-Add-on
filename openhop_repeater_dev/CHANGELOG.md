@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.1.14
+
+- Track upstream `DEV` commit `f634c68` from `openhop/openhop-repeater:dev`
+- Previous tracked commit: `efc5616`
+- Upstream diff: https://github.com/openhop-dev/openhop_repeater/compare/efc5616ec4f0bf15c951e9babcf7c6054dc48927...f634c684ce7053c92366d61c757d90afd818592c
+- Included upstream commits:
+  - `f665237` ci: format room server for pre-commit
+  - `1d5b8f8` ci: expand pull request validation
+  - `19ab3df` test: stop the suite killing itself part-way through
+  - `af21189` Merge pull request #431 from pfmos/fix/test-suite-self-kill
+  - `e476b6f` fix(api): improve send_advert function handling and response messages
+  - `77e938a` Merge pull request #427 from yellowcooln/ci/fix-precommit-format
+  - `bddb21a` fix: correct project description in pyproject.toml
+  - `bd0c340` fix(sqlite): stop creating the upstream index before its columns exist
+
 ## 2.1.13
 
 - Track upstream `DEV` commit `efc5616` from `openhop/openhop-repeater:dev`

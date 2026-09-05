@@ -1,5 +1,5 @@
 name: "openHop Repeater Dev"
-version: "2.1.13"
+version: "2.1.14"
 slug: "openhop_repeater_dev"
 description: "Development-tracking openHop Repeater add-on for Home Assistant"
 url: "https://github.com/openhop-dev/openhop_repeater"
