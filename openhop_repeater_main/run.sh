@@ -54,6 +54,22 @@ if [ "$(readlink "${RUNTIME_CONFIG_DIR}" 2>/dev/null || true)" != "${CONFIG_DIR}
     ln -s "${CONFIG_DIR}" "${RUNTIME_CONFIG_DIR}"
 fi
 
+# Older channel images predate the plugin manager. Only fall back when its
+# supervisor module is absent, never when an installed supervisor fails to run.
+RUNTIME_MODULE="$("${PYTHON}" -c '
+import importlib.util
+
+module = "repeater.plugins.container_supervisor"
+try:
+    spec = importlib.util.find_spec(module)
+except ModuleNotFoundError as exc:
+    if exc.name not in {"repeater.plugins", module}:
+        raise
+    spec = None
+print(module if spec is not None else "repeater.main")
+')"
+log "using runtime ${RUNTIME_MODULE}"
+
 CHILD_PID=""
 STOP_REQUESTED=false
 
@@ -92,7 +108,7 @@ while :; do
         exit 0
     fi
     started_at="$(date +%s)"
-    "${PYTHON}" -m repeater.main --config "${RUNTIME_CONFIG_DIR}/config.yaml" &
+    "${PYTHON}" -m "${RUNTIME_MODULE}" --config "${RUNTIME_CONFIG_DIR}/config.yaml" &
     CHILD_PID=$!
     if [ "${STOP_REQUESTED}" = "true" ]; then
         kill -TERM "${CHILD_PID}" 2>/dev/null || true

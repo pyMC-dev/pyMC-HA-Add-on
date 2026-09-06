@@ -1,5 +1,5 @@
 name: "openHop Repeater Main"
-version: "2.1.0"
+version: "2.1.1"
 slug: "openhop_repeater_main"
 description: "Mainline-tracking openHop Repeater add-on for Home Assistant"
 url: "https://github.com/openhop-dev/openhop_repeater"

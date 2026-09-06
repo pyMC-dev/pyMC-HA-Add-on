@@ -79,6 +79,50 @@ class RuntimeLifecycleTests(unittest.TestCase):
             text.index('"${PYTHON}" "${CONFIG_HELPER}" bootstrap'),
         )
 
+    def test_packaged_supervisor_is_selected_and_restarted(self) -> None:
+        source = """
+            import os
+            from pathlib import Path
+
+            root = Path(os.environ["OPENHOP_TEST_ROOT"])
+            count_path = root / "supervisor.starts"
+            count = int(count_path.read_text()) + 1 if count_path.exists() else 1
+            count_path.write_text(str(count))
+        """
+        for addon in ADDONS:
+            with self.subTest(addon=addon), tempfile.TemporaryDirectory() as temp_dir:
+                root = Path(temp_dir)
+                package_root = make_runtime(root, "raise SystemExit(42)")
+                plugins = package_root / "repeater/plugins"
+                plugins.mkdir()
+                (plugins / "__init__.py").write_text("")
+                (plugins / "container_supervisor.py").write_text(textwrap.dedent(source))
+                env = base_env(root, addon, package_root)
+                env["OPENHOP_ADDON_MAX_RAPID_RESTARTS"] = "2"
+                result = subprocess.run(
+                    ["sh", str(ROOT / addon / "run.sh")], env=env,
+                    capture_output=True, text=True, timeout=15, check=False,
+                )
+                self.assertTrue((root / "supervisor.starts").exists(), result.stdout + result.stderr)
+                self.assertEqual((root / "supervisor.starts").read_text(), "3")
+                self.assertIn("rapid restart limit", result.stderr)
+
+    def test_broken_supervisor_does_not_fall_back_to_repeater(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            package_root = make_runtime(root, "raise RuntimeError('fallback must not run')")
+            plugins = package_root / "repeater/plugins"
+            plugins.mkdir()
+            (plugins / "__init__.py").write_text("")
+            (plugins / "container_supervisor.py").write_text("raise SystemExit(23)\n")
+            result = subprocess.run(
+                ["sh", str(ROOT / ADDONS[0] / "run.sh")],
+                env=base_env(root, ADDONS[0], package_root),
+                capture_output=True, text=True, timeout=15, check=False,
+            )
+            self.assertIn("status 23", result.stderr)
+            self.assertNotIn("fallback must not run", result.stderr)
+
     def test_sigterm_is_forwarded_and_child_is_reaped(self) -> None:
         child_source = """
             import os

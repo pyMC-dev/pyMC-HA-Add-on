@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.1
+
+- Prepare plugin-manager startup for the upcoming upstream Dev-to-Main promotion; this update does not switch Main to the Dev image.
+- Retain direct Repeater startup for older images without the supervisor, and preserve configuration paths, clean-restart protection, and signal forwarding.
+
 ## 2.1.0
 
 ### Upgrade notes

@@ -111,7 +111,9 @@ def validate_addon(name: str, expected: dict[str, str]) -> None:
         "OPENHOP_ADDON_MAX_RAPID_RESTARTS",
         "forward_stop",
         "rapid restart limit",
-        '"${PYTHON}" -m repeater.main',
+        '"${PYTHON}" -m "${RUNTIME_MODULE}"',
+        "repeater.plugins.container_supervisor",
+        'else "repeater.main"',
     ):
         if fragment not in run_script:
             fail(f"{name}/run.sh is missing {fragment!r}")
