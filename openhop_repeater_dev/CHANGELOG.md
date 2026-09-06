@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.1.15
+
+- Track upstream `DEV` commit `b65e541` from `openhop/openhop-repeater:dev`
+- Previous tracked commit: `f634c68`
+- Upstream diff: https://github.com/openhop-dev/openhop_repeater/compare/f634c684ce7053c92366d61c757d90afd818592c...b65e54196b8fa1a7f3fc54a02e4bfc1d939e0408
+- Included upstream commits:
+  - `72da7ee` fix(companion): make bulk contact import match stored advert types
+  - `c9fddbf` fix: update file handling to use UTF-8 encoding for YAML operations
+  - `b65e541` Merge branch 'pr-436' into dev
+
 ## 2.1.14
 
 - Track upstream `DEV` commit `f634c68` from `openhop/openhop-repeater:dev`
