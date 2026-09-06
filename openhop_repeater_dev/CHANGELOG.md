@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.16
+
+- Fix unavailable plugin management and catalogue access by starting the packaged Repeater/plugin-manager supervisor.
+- Retain direct Repeater startup for older images without the supervisor, and preserve configuration paths, clean-restart protection, and signal forwarding.
+
 ## 2.1.15
 
 - Track upstream `DEV` commit `b65e541` from `openhop/openhop-repeater:dev`
